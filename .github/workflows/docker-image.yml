@@ -26,6 +26,15 @@ jobs:
         echo "Iniciando login"
         docker login -u $Docker_user -p $Docker_password
         echo "fin del login"
+        
+    - name: Build Docker Image
+      run: |
+        docker build -t tebangiraldo/dockergraphql:1.0.0 .
+        
+    - name: Push Docker Image
+      run: |
+        docker push tebangiraldo/dockergraphql:1.0.0 .
+        
       
 #     - name: Build the Docker image
 #       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
