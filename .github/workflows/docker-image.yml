@@ -30,22 +30,26 @@ jobs:
       env:
         Docker_user: ${{ secrets.DOCKER }}
         Docker_password: ${{ secrets.PASSWORD_DOCKER }}
-        New_Version: ${{ steps.version.outputs.version }}
+        
       run: |
         echo "Iniciando login"
         docker login -u $Docker_user -p $Docker_password
         echo "fin del login"
         echo "New version: $New_Version"
         
-#     - name: Build Docker Image
-#       run: |
-#         docker build -t tebangiraldo/dockergraphql:1.0.0 .
-#         docker build -t tebangiraldo/dockergraphql:latest .
+    - name: Build Docker Image
+      env:
+        New_Version: ${{ steps.version.outputs.version }}
+      run: |
+        docker build -t tebangiraldo/dockergraphql:$New_Version .
+        docker build -t tebangiraldo/dockergraphql:latest .
         
-#     - name: Push Docker Image
-#       run: |
-#         docker push tebangiraldo/dockergraphql:1.0.0 
-#         docker push tebangiraldo/dockergraphql:latest
+    - name: Push Docker Image
+      env:
+        New_Version: ${{ steps.version.outputs.version }}
+      run: |
+        docker push tebangiraldo/dockergraphql:$New_Version 
+        docker push tebangiraldo/dockergraphql:latest
         
       
 #     - name: Build the Docker image
