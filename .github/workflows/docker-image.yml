@@ -18,22 +18,34 @@ jobs:
       with: 
         fetch-depth: 0
         
+    - name: Git Semantic Version
+      uses: PaulHatch/semantic-version@v4.0.3
+      with: 
+        major_pattern: "major:"
+        minor_pattern: "feat:"
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      id: version
+        
     - name: docker login
       env:
         Docker_user: ${{ secrets.DOCKER }}
         Docker_password: ${{ secrets.PASSWORD_DOCKER }}
+        New_Version: ${{ steps.version.outputs.version }}
       run: |
         echo "Iniciando login"
         docker login -u $Docker_user -p $Docker_password
         echo "fin del login"
+        echo "New version: $New_Version"
         
-    - name: Build Docker Image
-      run: |
-        docker build -t tebangiraldo/dockergraphql:1.0.0 .
+#     - name: Build Docker Image
+#       run: |
+#         docker build -t tebangiraldo/dockergraphql:1.0.0 .
+#         docker build -t tebangiraldo/dockergraphql:latest .
         
-    - name: Push Docker Image
-      run: |
-        docker push tebangiraldo/dockergraphql:1.0.0 
+#     - name: Push Docker Image
+#       run: |
+#         docker push tebangiraldo/dockergraphql:1.0.0 
+#         docker push tebangiraldo/dockergraphql:latest
         
       
 #     - name: Build the Docker image
